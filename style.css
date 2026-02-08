@@ -321,28 +321,33 @@ input[type="text"]:focus {
     .player-grid { grid-template-columns: 1fr; }
 }
 
-/* Play Order */
-.play-order-header {
-    grid-column: 1 / -1;
+/* Start Player */
+.start-player {
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: #64ffda;
-    margin-bottom: 10px;
-    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(100, 255, 218, 0.1);
+    border-radius: 10px;
 }
 
-.order-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    background: #64ffda;
-    color: #1a1a2e;
-    border-radius: 50%;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-right: 10px;
+.player-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* Rules styling */
+.roles-info {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.roles-info p {
+    margin: 8px 0;
+    font-size: 0.9rem;
 }
 
 /* Game Over Buttons */

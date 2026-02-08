@@ -31,10 +31,15 @@
             
             <div class="rules">
                 <h3>How to Play</h3>
-                <p>👥 <strong>Civilians</strong> get the same word</p>
-                <p>🤫 <strong>Undercover</strong> gets a similar word</p>
-                <p>🕵️ <strong>Mr. White</strong> gets no word</p>
-                <p>Give clues, find the imposters!</p>
+                <p><strong>1.</strong> Everyone secretly sees their word</p>
+                <p><strong>2.</strong> Take turns saying ONE word clue about your word</p>
+                <p><strong>3.</strong> Vote to eliminate who you think is lying</p>
+                <p><strong>4.</strong> Repeat until you find the imposters!</p>
+                <div class="roles-info">
+                    <p>👥 <strong>Civilians</strong> — same word, find the fakes</p>
+                    <p>🤫 <strong>Undercover</strong> — similar word, blend in</p>
+                    <p>🕵️ <strong>Mr. White</strong> — no word, fake it!</p>
+                </div>
             </div>
         </div>
 
@@ -56,12 +61,12 @@
 
         <!-- Game Screen -->
         <div id="game" class="screen">
-            <h2>Give Clues!</h2>
-            <p class="hint">Each player says ONE word clue about their word</p>
+            <h2>🗣️ Clue Round</h2>
+            <p class="hint">Go around clockwise. Say ONE word that relates to your word.<br>Be clever — too obvious and you're suspicious!</p>
             
             <div id="alivePlayers" class="player-grid"></div>
             
-            <button id="startVote" class="btn btn-primary">Start Voting</button>
+            <button id="startVote" class="btn btn-primary">Everyone spoke? Start Voting</button>
         </div>
 
         <!-- Vote Screen -->

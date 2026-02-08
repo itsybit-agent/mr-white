@@ -154,22 +154,19 @@ function assignRoles() {
 }
 
 function renderAlivePlayers() {
-    // Show players in play order with numbers
-    const alivePlayers = gameState.playOrder.filter(i => players[i].alive);
+    // Find first alive player in play order
+    const firstAlive = gameState.playOrder.find(i => players[i].alive);
+    const starterName = firstAlive !== undefined ? players[firstAlive].name : '';
     
     alivePlayersEl.innerHTML = `
-        <div class="play-order-header">Speaking Order:</div>
-        ${alivePlayers.map((playerIdx, orderNum) => `
-            <div class="player-card" data-index="${playerIdx}">
-                <span class="order-number">${orderNum + 1}</span>
-                ${players[playerIdx].name}
-            </div>
-        `).join('')}
-        ${players.filter(p => !p.alive).map((p, i) => `
-            <div class="player-card eliminated">
-                ${p.name} ☠️
-            </div>
-        `).join('')}
+        <div class="start-player">👉 <strong>${starterName}</strong> starts!</div>
+        <div class="player-list">
+            ${players.map((p, i) => `
+                <div class="player-card ${p.alive ? '' : 'eliminated'}">
+                    ${p.name}${!p.alive ? ' ☠️' : ''}
+                </div>
+            `).join('')}
+        </div>
     `;
 }
 
