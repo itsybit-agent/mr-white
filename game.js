@@ -154,9 +154,19 @@ function assignRoles() {
 }
 
 function renderAlivePlayers() {
-    // Find first alive player in play order
-    const firstAlive = gameState.playOrder.find(i => players[i].alive);
-    const starterName = firstAlive !== undefined ? players[firstAlive].name : '';
+    // Find first alive player in play order (with fallback)
+    let starterName = '';
+    if (gameState.playOrder && gameState.playOrder.length > 0) {
+        const firstAliveIdx = gameState.playOrder.find(i => players[i] && players[i].alive);
+        if (firstAliveIdx !== undefined) {
+            starterName = players[firstAliveIdx].name;
+        }
+    }
+    // Fallback: find any alive civilian
+    if (!starterName) {
+        const aliveCivilian = players.find(p => p.alive && p.role === 'civilian');
+        starterName = aliveCivilian ? aliveCivilian.name : players.find(p => p.alive)?.name || '???';
+    }
     
     alivePlayersEl.innerHTML = `
         <div class="start-player">👉 <strong>${starterName}</strong> starts!</div>
