@@ -264,10 +264,86 @@ input[type="text"]:focus {
 }
 
 .vote-count {
-    display: block;
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Voting Controls */
+.vote-counter {
+    text-align: center;
+    font-size: 1.3rem;
+    color: #64ffda;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: rgba(100, 255, 218, 0.1);
+    border-radius: 10px;
+}
+
+.vote-instructions {
+    text-align: center;
+    color: #8892b0;
+    margin-bottom: 20px;
     font-size: 0.9rem;
-    color: #ff6b6b;
-    margin-top: 5px;
+}
+
+.vote-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: default;
+}
+
+.vote-card .player-name {
+    font-size: 1.2rem;
+    color: #fff;
+    margin: 0;
+}
+
+.vote-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vote-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vote-btn.plus {
+    background: linear-gradient(135deg, #48c9b0 0%, #3db39c 100%);
+    color: #1a1a2e;
+}
+
+.vote-btn.minus {
+    background: rgba(255, 255, 255, 0.1);
+    color: #8892b0;
+}
+
+.vote-btn:hover {
+    transform: scale(1.1);
+}
+
+.vote-btn.plus:hover {
+    box-shadow: 0 0 15px rgba(72, 201, 176, 0.5);
+}
+
+.vote-card.voted {
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
 }
 
 /* Elimination */

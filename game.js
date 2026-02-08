@@ -182,27 +182,61 @@ function renderAlivePlayers() {
 
 function renderVotePlayers() {
     gameState.votes = {};
-    votePlayersEl.innerHTML = players
-        .filter(p => p.alive)
-        .map((p, i) => {
+    const alivePlayers = players.filter(p => p.alive);
+    
+    votePlayersEl.innerHTML = `
+        <div class="vote-counter" id="voteCounter">Votes: 0 / ${alivePlayers.length}</div>
+        <p class="vote-instructions">Each player taps their vote. Tap ➕ to vote, ➖ to undo.</p>
+        ${alivePlayers.map(p => {
             const realIndex = players.indexOf(p);
             return `
-                <div class="player-card" data-index="${realIndex}" onclick="toggleVote(${realIndex})">
-                    ${p.name}
-                    <span class="vote-count" id="votes-${realIndex}"></span>
+                <div class="player-card vote-card" data-index="${realIndex}">
+                    <span class="player-name">${p.name}</span>
+                    <div class="vote-controls">
+                        <button class="vote-btn minus" onclick="removeVote(${realIndex})">➖</button>
+                        <span class="vote-count" id="votes-${realIndex}">0</span>
+                        <button class="vote-btn plus" onclick="addVote(${realIndex})">➕</button>
+                    </div>
                 </div>
             `;
-        }).join('');
+        }).join('')}
+    `;
 }
 
-function toggleVote(index) {
-    if (gameState.votes[index]) {
-        delete gameState.votes[index];
-    } else {
-        gameState.votes[index] = (gameState.votes[index] || 0) + 1;
+function addVote(index) {
+    const alivePlayers = players.filter(p => p.alive).length;
+    const totalVotes = Object.values(gameState.votes).reduce((a, b) => a + b, 0);
+    
+    // Can't vote more times than there are alive players
+    if (totalVotes >= alivePlayers) {
+        return;
     }
     
-    // Update vote display
+    gameState.votes[index] = (gameState.votes[index] || 0) + 1;
+    updateVoteDisplay();
+}
+
+function removeVote(index) {
+    if (gameState.votes[index] && gameState.votes[index] > 0) {
+        gameState.votes[index]--;
+        if (gameState.votes[index] === 0) {
+            delete gameState.votes[index];
+        }
+    }
+    updateVoteDisplay();
+}
+
+function updateVoteDisplay() {
+    const alivePlayers = players.filter(p => p.alive).length;
+    const totalVotes = Object.values(gameState.votes).reduce((a, b) => a + b, 0);
+    
+    // Update vote counter
+    const counterEl = document.getElementById('voteCounter');
+    if (counterEl) {
+        counterEl.textContent = `Votes: ${totalVotes} / ${alivePlayers}`;
+    }
+    
+    // Update player cards
     document.querySelectorAll('#votePlayers .player-card').forEach(card => {
         const idx = parseInt(card.dataset.index);
         const voteEl = document.getElementById(`votes-${idx}`);
@@ -428,6 +462,7 @@ if (newRoundBtn) {
     });
 }
 
-// Make removePlayer available globally
+// Make functions available globally
 window.removePlayer = removePlayer;
-window.toggleVote = toggleVote;
+window.addVote = addVote;
+window.removeVote = removeVote;
