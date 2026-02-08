@@ -320,3 +320,39 @@ input[type="text"]:focus {
     .word { font-size: 2rem; }
     .player-grid { grid-template-columns: 1fr; }
 }
+
+/* Play Order */
+.play-order-header {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #64ffda;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.order-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: #64ffda;
+    color: #1a1a2e;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* Game Over Buttons */
+.game-over-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.game-over-buttons .btn {
+    width: 100%;
+}

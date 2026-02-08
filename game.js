@@ -8,7 +8,8 @@ let gameState = {
     undercoverWord: '',
     includeUndercover: true,
     votes: {},
-    phase: 'setup'
+    phase: 'setup',
+    playOrder: [] // Order of play (indices into players array)
 };
 
 // Load word pairs
@@ -139,15 +140,37 @@ function assignRoles() {
         players[shuffledIndices[1]].role = 'undercover';
         players[shuffledIndices[1]].word = gameState.undercoverWord;
     }
+    
+    // Determine play order - civilians first, then others
+    // Shuffle all player indices, then move a civilian to the front
+    gameState.playOrder = shuffle([...Array(players.length).keys()]);
+    
+    // Find first civilian in the shuffled order and move to front
+    const firstCivilianIdx = gameState.playOrder.findIndex(i => players[i].role === 'civilian');
+    if (firstCivilianIdx > 0) {
+        const civilian = gameState.playOrder.splice(firstCivilianIdx, 1)[0];
+        gameState.playOrder.unshift(civilian);
+    }
 }
 
 function renderAlivePlayers() {
-    alivePlayersEl.innerHTML = players
-        .map((p, i) => `
-            <div class="player-card ${p.alive ? '' : 'eliminated'}" data-index="${i}">
-                ${p.name}
+    // Show players in play order with numbers
+    const alivePlayers = gameState.playOrder.filter(i => players[i].alive);
+    
+    alivePlayersEl.innerHTML = `
+        <div class="play-order-header">Speaking Order:</div>
+        ${alivePlayers.map((playerIdx, orderNum) => `
+            <div class="player-card" data-index="${playerIdx}">
+                <span class="order-number">${orderNum + 1}</span>
+                ${players[playerIdx].name}
             </div>
-        `).join('');
+        `).join('')}
+        ${players.filter(p => !p.alive).map((p, i) => `
+            <div class="player-card eliminated">
+                ${p.name} ☠️
+            </div>
+        `).join('')}
+    `;
 }
 
 function renderVotePlayers() {
@@ -359,11 +382,44 @@ playAgainBtn.addEventListener('click', () => {
         undercoverWord: '',
         includeUndercover: true,
         votes: {},
-        phase: 'setup'
+        phase: 'setup',
+        playOrder: []
     };
     updatePlayerList();
     showScreen('setup');
 });
+
+// New Round with same players
+const newRoundBtn = document.getElementById('newRound');
+if (newRoundBtn) {
+    newRoundBtn.addEventListener('click', () => {
+        // Keep players but reset their state
+        players.forEach(p => {
+            p.role = null;
+            p.word = null;
+            p.alive = true;
+        });
+        
+        gameState = {
+            currentPlayerIndex: 0,
+            civilianWord: '',
+            undercoverWord: '',
+            includeUndercover: includeUndercoverCheckbox.checked,
+            votes: {},
+            phase: 'setup',
+            playOrder: []
+        };
+        
+        // Start new round directly
+        assignRoles();
+        gameState.currentPlayerIndex = 0;
+        showScreen('reveal');
+        currentPlayerEl.textContent = players[0].name;
+        wordHiddenEl.classList.remove('hidden');
+        wordVisibleEl.classList.add('hidden');
+        guessInputEl.value = '';
+    });
+}
 
 // Make removePlayer available globally
 window.removePlayer = removePlayer;
