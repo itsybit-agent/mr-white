@@ -336,14 +336,12 @@ showWordBtn.addEventListener('click', () => {
     roleDisplayEl.textContent = player.role.toUpperCase();
     roleDisplayEl.className = `role ${player.role}`;
     
+    const categoryHtml = gameState.category ? `<div class="category-hint">${gameState.category}</div>` : '';
+    
     if (player.role === 'mrwhite') {
-        if (gameState.category) {
-            wordDisplayEl.innerHTML = `<div class="category-hint">Category:</div>${gameState.category}`;
-        } else {
-            wordDisplayEl.textContent = '???';
-        }
+        wordDisplayEl.innerHTML = categoryHtml + '<div class="mr-white-word">???</div>';
     } else {
-        wordDisplayEl.textContent = player.word;
+        wordDisplayEl.innerHTML = categoryHtml + `<div>${player.word}</div>`;
     }
 });
 
