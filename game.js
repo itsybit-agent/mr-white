@@ -118,8 +118,16 @@ function addPlayer() {
 
 function assignRoles() {
     const pair = wordPairs[Math.floor(Math.random() * wordPairs.length)];
-    gameState.civilianWord = pair[0];
-    gameState.undercoverWord = pair[1];
+    // Support both old format ["word1", "word2"] and new format {words: [...], category: "..."}
+    if (Array.isArray(pair)) {
+        gameState.civilianWord = pair[0];
+        gameState.undercoverWord = pair[1];
+        gameState.category = null;
+    } else {
+        gameState.civilianWord = pair.words[0];
+        gameState.undercoverWord = pair.words[1];
+        gameState.category = pair.category;
+    }
     gameState.includeUndercover = includeUndercoverCheckbox.checked && players.length >= 4;
     
     // Shuffle players for random role assignment
@@ -329,7 +337,11 @@ showWordBtn.addEventListener('click', () => {
     roleDisplayEl.className = `role ${player.role}`;
     
     if (player.role === 'mrwhite') {
-        wordDisplayEl.textContent = '???';
+        if (gameState.category) {
+            wordDisplayEl.innerHTML = `<div class="category-hint">Category:</div>${gameState.category}`;
+        } else {
+            wordDisplayEl.textContent = '???';
+        }
     } else {
         wordDisplayEl.textContent = player.word;
     }
