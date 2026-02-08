@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Mr. White</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Setup Screen -->
+        <div id="setup" class="screen active">
+            <h1>🕵️ Mr. White</h1>
+            <p class="subtitle">Social Deduction Party Game</p>
+            
+            <div class="player-input">
+                <input type="text" id="playerName" placeholder="Enter player name" maxlength="20">
+                <button id="addPlayer" class="btn">Add</button>
+            </div>
+            
+            <ul id="playerList"></ul>
+            
+            <div class="options">
+                <label>
+                    <input type="checkbox" id="includeUndercover" checked>
+                    Include Undercover
+                </label>
+            </div>
+            
+            <button id="startGame" class="btn btn-primary" disabled>Start Game (3+ players)</button>
+            
+            <div class="rules">
+                <h3>How to Play</h3>
+                <p>👥 <strong>Civilians</strong> get the same word</p>
+                <p>🤫 <strong>Undercover</strong> gets a similar word</p>
+                <p>🕵️ <strong>Mr. White</strong> gets no word</p>
+                <p>Give clues, find the imposters!</p>
+            </div>
+        </div>
+
+        <!-- Role Reveal Screen -->
+        <div id="reveal" class="screen">
+            <h2>Pass to:</h2>
+            <h1 id="currentPlayer" class="player-name"></h1>
+            
+            <div id="wordHidden" class="word-container">
+                <button id="showWord" class="btn btn-large">👆 Tap to see your role</button>
+            </div>
+            
+            <div id="wordVisible" class="word-container hidden">
+                <div id="roleDisplay" class="role"></div>
+                <div id="wordDisplay" class="word"></div>
+                <button id="hideWord" class="btn btn-secondary">Hide & Pass</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game" class="screen">
+            <h2>Give Clues!</h2>
+            <p class="hint">Each player says ONE word clue about their word</p>
+            
+            <div id="alivePlayers" class="player-grid"></div>
+            
+            <button id="startVote" class="btn btn-primary">Start Voting</button>
+        </div>
+
+        <!-- Vote Screen -->
+        <div id="vote" class="screen">
+            <h2>Who is suspicious?</h2>
+            <p class="hint">Tap to vote, tap again to remove vote</p>
+            
+            <div id="votePlayers" class="player-grid"></div>
+            
+            <button id="confirmVote" class="btn btn-danger">Eliminate Top Voted</button>
+        </div>
+
+        <!-- Elimination Screen -->
+        <div id="elimination" class="screen">
+            <h2 id="eliminatedName" class="player-name"></h2>
+            <p>was eliminated!</p>
+            
+            <div id="eliminatedRole" class="role"></div>
+            
+            <div id="mrWhiteGuess" class="hidden">
+                <p>Mr. White can guess the word to win!</p>
+                <input type="text" id="guessInput" placeholder="Enter your guess">
+                <button id="submitGuess" class="btn">Guess</button>
+                <button id="skipGuess" class="btn btn-secondary">Give Up</button>
+            </div>
+            
+            <button id="continueGame" class="btn btn-primary hidden">Continue</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOver" class="screen">
+            <h1 id="winnerText"></h1>
+            <p id="revealWords"></p>
+            
+            <div id="finalRoles"></div>
+            
+            <button id="playAgain" class="btn btn-primary">Play Again</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
