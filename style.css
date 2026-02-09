@@ -453,3 +453,53 @@ input[type="text"]:focus {
 .game-over-buttons .btn {
     width: 100%;
 }
+
+/* Pack Selection */
+.pack-selection {
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+}
+
+.pack-selection h4 {
+    text-align: center;
+    color: #64ffda;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#packOptions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pack-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.pack-option:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.pack-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #64ffda;
+}
+
+.pack-option input[type="checkbox"]:checked + span {
+    color: #64ffda;
+}

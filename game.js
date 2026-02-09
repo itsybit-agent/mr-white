@@ -1,6 +1,9 @@
 // Mr. White - Social Deduction Party Game
 
 let wordPairs = [];
+let allPairs = [];
+let packs = {};
+let selectedPacks = new Set(['general', 'popculture', 'food']);
 let players = [];
 let gameState = {
     currentPlayerIndex: 0,
@@ -15,14 +18,55 @@ let gameState = {
 // Load word pairs
 fetch('words.json')
     .then(r => r.json())
-    .then(data => wordPairs = data.pairs)
+    .then(data => {
+        allPairs = data.pairs;
+        packs = data.packs || { general: '🎲 General' };
+        renderPackOptions();
+        filterWordPairs();
+    })
     .catch(() => {
         // Fallback words if fetch fails
-        wordPairs = [
-            ["Beach", "Pool"], ["Cat", "Tiger"], ["Coffee", "Tea"],
-            ["Pizza", "Burger"], ["Rain", "Snow"], ["Doctor", "Nurse"]
+        allPairs = [
+            { words: ["Beach", "Pool"], category: "Places to Swim", pack: "general" },
+            { words: ["Cat", "Tiger"], category: "Felines", pack: "general" },
+            { words: ["Coffee", "Tea"], category: "Hot Drinks", pack: "food" }
         ];
+        packs = { general: '🎲 General', food: '🍔 Food & Drink' };
+        renderPackOptions();
+        filterWordPairs();
     });
+
+function renderPackOptions() {
+    const container = document.getElementById('packOptions');
+    if (!container) return;
+    
+    container.innerHTML = Object.entries(packs).map(([key, label]) => `
+        <label class="pack-option">
+            <input type="checkbox" value="${key}" ${selectedPacks.has(key) ? 'checked' : ''} onchange="togglePack('${key}')">
+            ${label}
+        </label>
+    `).join('');
+}
+
+function togglePack(packKey) {
+    if (selectedPacks.has(packKey)) {
+        selectedPacks.delete(packKey);
+    } else {
+        selectedPacks.add(packKey);
+    }
+    filterWordPairs();
+}
+
+function filterWordPairs() {
+    wordPairs = allPairs.filter(p => selectedPacks.has(p.pack));
+    // Update start button with count
+    const btn = document.getElementById('startGame');
+    if (btn && !btn.disabled) {
+        btn.textContent = `Start Game (${players.length} players, ${wordPairs.length} words)`;
+    }
+}
+
+window.togglePack = togglePack;
 
 // DOM Elements
 const screens = {
@@ -95,10 +139,14 @@ function updatePlayerList() {
         </li>
     `).join('');
     
-    startGameBtn.disabled = players.length < 3;
-    startGameBtn.textContent = players.length < 3 
-        ? `Start Game (${3 - players.length} more needed)` 
-        : `Start Game (${players.length} players)`;
+    startGameBtn.disabled = players.length < 3 || wordPairs.length === 0;
+    if (players.length < 3) {
+        startGameBtn.textContent = `Start Game (${3 - players.length} more needed)`;
+    } else if (wordPairs.length === 0) {
+        startGameBtn.textContent = 'Select at least one pack!';
+    } else {
+        startGameBtn.textContent = `Start Game (${players.length} players, ${wordPairs.length} words)`;
+    }
 }
 
 function removePlayer(index) {
