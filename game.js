@@ -197,8 +197,18 @@ function assignRoles() {
         players[shuffledIndices[1]].word = gameState.undercoverWord;
     }
     
-    // Determine play order - random order (shuffled)
+    // Determine play order - random, but Mr. White should NOT start first
+    // (gives them a chance to hear clues before faking)
     gameState.playOrder = shuffle([...Array(players.length).keys()]);
+    
+    // If Mr. White is first, move them to a random later position
+    const mrWhitePlayerIdx = players.findIndex(p => p.role === 'mrwhite');
+    if (gameState.playOrder[0] === mrWhitePlayerIdx && gameState.playOrder.length > 1) {
+        // Swap with a random position (not first)
+        const swapPos = 1 + Math.floor(Math.random() * (gameState.playOrder.length - 1));
+        [gameState.playOrder[0], gameState.playOrder[swapPos]] = 
+            [gameState.playOrder[swapPos], gameState.playOrder[0]];
+    }
 }
 
 function renderAlivePlayers() {
