@@ -512,7 +512,112 @@ if (newRoundBtn) {
     });
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// TEAM SAVE/LOAD (localStorage)
+// ═══════════════════════════════════════════════════════════════════
+const TEAMS_KEY = 'mrwhite_saved_teams';
+
+function getSavedTeams() {
+    try {
+        return JSON.parse(localStorage.getItem(TEAMS_KEY)) || {};
+    } catch {
+        return {};
+    }
+}
+
+function saveTeamsToStorage(teams) {
+    localStorage.setItem(TEAMS_KEY, JSON.stringify(teams));
+}
+
+function renderSavedTeams() {
+    const teams = getSavedTeams();
+    const select = document.getElementById('savedTeams');
+    const teamNames = Object.keys(teams);
+    
+    select.innerHTML = '<option value="">📂 Load a saved team...</option>' +
+        teamNames.map(name => `<option value="${name}">${name} (${teams[name].length})</option>`).join('');
+    
+    // Show/hide section based on whether there are saved teams
+    document.getElementById('savedTeamsSection').style.display = teamNames.length > 0 ? 'flex' : 'none';
+}
+
+function saveCurrentTeam() {
+    const nameInput = document.getElementById('teamName');
+    const teamName = nameInput.value.trim();
+    
+    if (!teamName) {
+        alert('Enter a team name');
+        return;
+    }
+    
+    if (players.length < 2) {
+        alert('Add at least 2 players first');
+        return;
+    }
+    
+    const teams = getSavedTeams();
+    teams[teamName] = players.map(p => p.name);
+    saveTeamsToStorage(teams);
+    
+    nameInput.value = '';
+    renderSavedTeams();
+}
+
+function loadTeam(teamName) {
+    if (!teamName) return;
+    
+    const teams = getSavedTeams();
+    const teamPlayers = teams[teamName];
+    
+    if (teamPlayers) {
+        players = teamPlayers.map(name => ({ name, role: null, word: null, alive: true }));
+        updatePlayerList();
+    }
+    
+    // Reset dropdown
+    document.getElementById('savedTeams').value = '';
+}
+
+function deleteSelectedTeam() {
+    const select = document.getElementById('savedTeams');
+    const teamName = select.value;
+    
+    if (!teamName) {
+        alert('Select a team to delete');
+        return;
+    }
+    
+    if (confirm(`Delete team "${teamName}"?`)) {
+        const teams = getSavedTeams();
+        delete teams[teamName];
+        saveTeamsToStorage(teams);
+        renderSavedTeams();
+    }
+}
+
+// Team event listeners
+document.getElementById('savedTeams')?.addEventListener('change', (e) => loadTeam(e.target.value));
+document.getElementById('saveTeam')?.addEventListener('click', saveCurrentTeam);
+document.getElementById('deleteTeam')?.addEventListener('click', deleteSelectedTeam);
+document.getElementById('teamName')?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') saveCurrentTeam();
+});
+
+// Show save section when players exist
+const originalUpdatePlayerList = updatePlayerList;
+updatePlayerList = function() {
+    originalUpdatePlayerList();
+    const saveSection = document.getElementById('saveTeamSection');
+    if (saveSection) {
+        saveSection.style.display = players.length >= 2 ? 'flex' : 'none';
+    }
+};
+
+// Initialize saved teams on load
+renderSavedTeams();
+
 // Make functions available globally
 window.removePlayer = removePlayer;
 window.addVote = addVote;
 window.removeVote = removeVote;
+window.loadTeam = loadTeam;

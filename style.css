@@ -503,3 +503,50 @@ input[type="text"]:focus {
 .pack-option input[type="checkbox"]:checked + span {
     color: #64ffda;
 }
+
+/* Saved Teams */
+.saved-teams {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.saved-teams select {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 14px;
+}
+
+.save-team-section {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+.save-team-section input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 14px;
+}
+
+.btn-small {
+    padding: 8px 12px;
+    font-size: 12px;
+}
+
+.btn-danger {
+    background: #e74c3c;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+}

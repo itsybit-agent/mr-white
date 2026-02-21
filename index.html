@@ -13,12 +13,25 @@
             <h1>🕵️ Mr. White</h1>
             <p class="subtitle">Social Deduction Party Game</p>
             
+            <!-- Saved Teams -->
+            <div class="saved-teams" id="savedTeamsSection">
+                <select id="savedTeams">
+                    <option value="">📂 Load a saved team...</option>
+                </select>
+                <button id="deleteTeam" class="btn btn-small btn-danger" title="Delete selected team">🗑️</button>
+            </div>
+
             <div class="player-input">
                 <input type="text" id="playerName" placeholder="Enter player name" maxlength="20">
                 <button id="addPlayer" class="btn">Add</button>
             </div>
             
             <ul id="playerList"></ul>
+            
+            <div class="save-team-section" id="saveTeamSection" style="display:none;">
+                <input type="text" id="teamName" placeholder="Team name" maxlength="20">
+                <button id="saveTeam" class="btn btn-small">💾 Save Team</button>
+            </div>
             
             <div class="options">
                 <label>
