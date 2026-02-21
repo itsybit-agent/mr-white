@@ -197,16 +197,8 @@ function assignRoles() {
         players[shuffledIndices[1]].word = gameState.undercoverWord;
     }
     
-    // Determine play order - Mr. White starts (since they get a category hint)
-    // Shuffle all player indices, then move Mr. White to the front
+    // Determine play order - random order (shuffled)
     gameState.playOrder = shuffle([...Array(players.length).keys()]);
-    
-    // Find Mr. White and move to front
-    const mrWhiteIdx = gameState.playOrder.findIndex(i => players[i].role === 'mrwhite');
-    if (mrWhiteIdx > 0) {
-        const mrWhite = gameState.playOrder.splice(mrWhiteIdx, 1)[0];
-        gameState.playOrder.unshift(mrWhite);
-    }
 }
 
 function renderAlivePlayers() {
